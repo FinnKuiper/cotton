@@ -40,6 +40,8 @@ class Bot(commands.Bot):
 
 bot = Bot()
 
+bot.remove_command("help")
+
 
 # load cogs
 @bot.event
