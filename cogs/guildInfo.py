@@ -14,7 +14,9 @@ class GuildInfo(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command(
-        name="guildinfo", with_app_command=True, description="Get the guild info"
+        name="guildinfo",
+        with_app_command=True,
+        description="Get the guild info",
     )
     @app_commands.guilds(discord.Object(id=guild_id))
     async def guildinfo(self, ctx):
@@ -38,9 +40,12 @@ class GuildInfo(commands.Cog):
         # create embed with the guild info
         embed = discord.Embed(
             title=f"{guild_name} Info",
-            description=f"Prefix: {guild_prefix}\nUsers: {guild_users}",
-            color=0x00FF00,
+            color=0xEB34E5,
+            timestamp=ctx.message.created_at,
         )
+        embed.add_field(name="prefix", value=guild_prefix, inline=True)
+        embed.add_field(name="users", value=guild_users, inline=True)
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
         await ctx.send(embed=embed)
 
     @commands.Cog.listener()
