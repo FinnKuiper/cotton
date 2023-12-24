@@ -13,10 +13,11 @@ class SyncDatabase(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.cooldown(1, 3600, commands.BucketType.guild)
     @commands.hybrid_command(
         name="syncdatabase",
         with_app_command=True,
-        description="Get the ping of the bot",
+        description="If a user isn't in the database this would add them. (cooldown of 1 hour)",
     )
     @app_commands.guilds(discord.Object(id=guild_id))
     @commands.has_permissions(administrator=True)
@@ -43,6 +44,9 @@ class SyncDatabase(commands.Cog):
         # check if the user is in the database
         await ctx.send("Checking if user is in the database...")
         for member in members:
+            # if user is bot skip
+            if member.bot:
+                continue
             if member.id not in users_in_database:
                 await ctx.send(f"Adding {member} to the database...")
                 # add user to database
