@@ -28,7 +28,7 @@ class Setup(commands.Cog):
         guild_data = collection_name.find_one({"guild_id": guild.id})
         if guild_data:
             await ctx.send(
-                f"{guild.name} is already in the system, if you haven't set the update channel yet, use the command `!setUpdateChannel`, by default the prefix is set to `!`, you can check this by using the commmand `!guildInfo`"
+                f"{guild.name} is already in the system, if you haven't set the update channel yet, use the command `setUpdateChannel`, by default the prefix is set to `!`, you can check this by using the commmand `setprefix`"
             )
             return
 
@@ -38,6 +38,8 @@ class Setup(commands.Cog):
             "guild_id": guild.id,
             "owner": guild.owner,
             "update_channel": None,
+            "welcome_channel": None,
+            "leveling": False,
             "prefix": "!",
             "expiry_date": None,
         }
@@ -45,7 +47,7 @@ class Setup(commands.Cog):
         # insert item
         collection_name.insert_one(item)
         await ctx.send(
-            f"Added {guild.name} to the system, you can now use the bot properly"
+            f"Added {guild.name} to cotton, by default the prefix is set to `!`, you can check this by using the commmand `setprefix`, other settings can be found with the command `guildsettings`!"
         )
 
     @commands.Cog.listener()
