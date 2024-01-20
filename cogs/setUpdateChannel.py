@@ -23,6 +23,10 @@ class SetUpdateChannel(commands.Cog):
         dbname = get_database()
         collection_name = dbname["guild"]
 
+        channel = discord.utils.get(guild.text_channels, name=f"{channel}")
+
+        channel_id = channel.id
+
         # check if guild is already in the system
         guild_data = collection_name.find_one({"guild_id": guild.id})
         if not guild_data:
@@ -35,7 +39,8 @@ class SetUpdateChannel(commands.Cog):
         update_channel_id = guild_data["update_channel"]
         update_channel = guild.get_channel(update_channel_id)
 
-        if channel == None or not channel.isdigit():
+        # check if channel_id is none or not a numeric value
+        if channel_id == None or not str(channel_id).isnumeric():
             if update_channel or None:
                 await ctx.send(
                     f"The current update channel is {update_channel.mention}"
@@ -47,9 +52,10 @@ class SetUpdateChannel(commands.Cog):
         else:
             # update update channel
             collection_name.update_one(
-                {"guild_id": guild.id}, {"$set": {"update_channel": int(channel)}}
+                {"guild_id": guild.id}, {
+                    "$set": {"update_channel": int(channel_id)}}
             )
-            await ctx.send(f"Prefix changed to `{update_channel.mention}`")
+            await ctx.send(f"Channel changed to `{update_channel.mention}`")
             return
 
     @commands.Cog.listener()
