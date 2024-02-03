@@ -18,13 +18,20 @@ class Level(commands.Cog):
     )
     @app_commands.guilds(discord.Object(id=guild_id))
     async def level(self, ctx):
+        guild_id = ctx.guild.id
         # get database
         dbname = get_database()
         collection_name = dbname["leveling"]
 
+        # check if leveling is enabled
+        guild = dbname["guild"].find_one({"guild_id": guild_id})
+        leveling = guild["leveling"] if guild else False
+        if not leveling:
+            return await ctx.send("Leveling is not enabled in this guild!")
+
         # get user from the correct guild
         user = collection_name.find_one(
-            {"guild_id": ctx.guild.id, "user_id": ctx.author.id}
+            {"guild_id": guild_id, "user_id": ctx.author.id}
         )
         # if user is not in the database add them
         if not user:

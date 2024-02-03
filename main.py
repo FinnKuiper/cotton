@@ -67,6 +67,8 @@ async def on_guild_join(guild):
         "guild_id": guild.id,
         "owner": guild.owner,
         "update_channel": None,
+        "welcome_channel": None,
+        "leveling": False,
         "prefix": "!",
         "expiry_date": None,
     }
@@ -94,6 +96,13 @@ async def on_member_join(member):
     # get database
     dbname = get_database()
     collection_name = dbname["leveling"]
+
+    # check if leveling is enabled
+    guild_id = member.guild.id
+    guild = dbname["guild"].find_one({"guild_id": guild_id})
+    leveling = guild["leveling"] if guild else False
+    if not leveling:
+        return
 
     # create item
     item = {
@@ -126,68 +135,77 @@ async def on_member_remove(member):
 # when a message is sent add xp to the user
 @bot.event
 async def on_message(message):
-    # if the message is from a bot do nothing
     if message.author.bot:
         return
-    # get database
+    # check if leveling is enabled
     dbname = get_database()
-    collection_name = dbname["leveling"]
+    guild_id = message.guild.id
 
-    # get user with the correct guild id and user id
-    user = collection_name.find_one(
-        {"guild_id": message.guild.id, "user_id": message.author.id}
-    )
-    # if user is not in the database add them
-    if not user:
-        # create item
-        item = {
-            "name": message.author.name,
-            "guild_id": message.guild.id,
-            "user_id": message.author.id,
-            "level": 1,
-            "xp": 0,
-            "xp_to_level": 100,
-            "expiry_date": None,
-        }
+    guild = dbname["guild"].find_one({"guild_id": guild_id})
+    leveling = guild["leveling"] if guild else False
 
-        # insert item
-        collection_name.insert_one(item)
-        print(f"Added {message.author.name} to leveling database")
+    if leveling:
+        # if the message is from a bot do nothing
 
-    # add xp to user
-    else:
-        # get xp and xp_to_level
-        xp = user["xp"]
-        xp_to_level = user["xp_to_level"]
-        # add xp
-        xp += 50
-        # if xp is equal to xp_to_level level up
-        if xp >= xp_to_level:
-            # get level
-            level = user["level"]
-            # level up
-            level += 1
-            # get new xp_to_level
-            xp_to_level = (level * 10) ** 2
-            # update database
-            collection_name.update_one(
-                {"guild_id": message.guild.id, "user_id": message.author.id},
-                {"$set": {"level": level, "xp": xp, "xp_to_level": xp_to_level}},
-            )
-            print(f"{message.author.name} leveled up to level {level}")
-            # send message
-            await message.channel.send(
-                f"{message.author.mention} leveled up to level {level}"
-            )
-        # if xp is not equal to xp_to_level update database
+        # get database
+        collection_name = dbname["leveling"]
+
+        # get user with the correct guild id and user id
+        user = collection_name.find_one(
+            {"guild_id": message.guild.id, "user_id": message.author.id}
+        )
+        # if user is not in the database add them
+        if not user:
+            # create item
+            item = {
+                "name": message.author.name,
+                "guild_id": message.guild.id,
+                "user_id": message.author.id,
+                "level": 1,
+                "xp": 0,
+                "xp_to_level": 100,
+                "expiry_date": None,
+            }
+
+            # insert item
+            collection_name.insert_one(item)
+            print(f"Added {message.author.name} to leveling database")
+
+        # add xp to user
         else:
-            collection_name.update_one(
-                {"guild_id": message.guild.id, "user_id": message.author.id},
-                {"$set": {"xp": xp}},
-            )
+            # get xp and xp_to_level
+            xp = user["xp"]
+            xp_to_level = user["xp_to_level"]
+            # add xp
+            xp += 50
+            # if xp is equal to xp_to_level level up
+            if xp >= xp_to_level:
+                # get level
+                level = user["level"]
+                # level up
+                level += 1
+                # get new xp_to_level
+                xp_to_level = (level * 10) ** 2
+                # update database
+                collection_name.update_one(
+                    {"guild_id": message.guild.id, "user_id": message.author.id},
+                    {"$set": {"level": level, "xp": xp, "xp_to_level": xp_to_level}},
+                )
+                print(f"{message.author.name} leveled up to level {level}")
+                # send message
+                await message.channel.send(
+                    f"{message.author.mention} leveled up to level {level}"
+                )
+            # if xp is not equal to xp_to_level update database
+            else:
+                collection_name.update_one(
+                    {"guild_id": message.guild.id, "user_id": message.author.id},
+                    {"$set": {"xp": xp}},
+                )
 
     await bot.process_commands(message)
 
 
 # run bot
+print(token)
 bot.run(token)
