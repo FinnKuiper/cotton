@@ -14,10 +14,17 @@ class SyncCommands(commands.Cog):
         self.bot = bot
 
     @commands.command(name="synccommands", description="Sync slash commands")
-    async def synccommands(self, ctx):
+    async def synccommands(self, ctx, public: bool = False):
         # make sure the user is the owner of the bot
         if ctx.author.id != int(owner_id):
             await ctx.send("You are not the owner of the bot")
+            return
+
+        # sync commands
+        if public:
+            await ctx.send("Syncing public commands...")
+            await ctx.bot.tree.sync()
+            await ctx.send("Synced public commands!")
             return
 
         await ctx.send("Syncing commands...")
