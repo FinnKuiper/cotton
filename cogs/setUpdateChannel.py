@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 import os
 from pymongo_get_database import get_database
@@ -15,7 +14,6 @@ class SetUpdateChannel(commands.Cog):
         with_app_command=True,
         description="Set the update channel for the bot",
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     @commands.has_permissions(administrator=True)
     async def setupdatechannel(self, ctx, channel: discord.TextChannel):
         guild = ctx.guild
@@ -52,8 +50,7 @@ class SetUpdateChannel(commands.Cog):
         else:
             # update update channel
             collection_name.update_one(
-                {"guild_id": guild.id}, {
-                    "$set": {"update_channel": int(channel_id)}}
+                {"guild_id": guild.id}, {"$set": {"update_channel": int(channel_id)}}
             )
             await ctx.send(f"Channel changed to `{update_channel.mention}`")
             return

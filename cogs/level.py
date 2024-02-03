@@ -1,9 +1,7 @@
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 from pymongo_get_database import get_database
 import os
-import discord
 
 load_dotenv()
 guild_id = int(os.getenv("GUILD_ID"))
@@ -16,7 +14,6 @@ class Level(commands.Cog):
     @commands.hybrid_command(
         name="level", with_app_command=True, description="Get your level in the guild"
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     async def level(self, ctx):
         guild_id = ctx.guild.id
         # get database

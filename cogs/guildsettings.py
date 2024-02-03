@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import app_commands
 from pymongo_get_database import get_database
 from dotenv import load_dotenv
 import os
@@ -18,7 +17,6 @@ class GuildSettings(commands.Cog):
         with_app_command=True,
         description="Get the guild info",
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     @commands.has_permissions(administrator=True)
     async def guildsettings(self, ctx):
         # get database

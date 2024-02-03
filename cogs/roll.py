@@ -1,7 +1,5 @@
 import random
-import discord
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 import os
 
@@ -16,7 +14,6 @@ class Roll(commands.Cog):
     @commands.hybrid_command(
         name="roll", with_app_command=True, description="Roll a dice!", aliases=["r"]
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     async def coinflip(self, ctx, number_of_sides: int = 6):
         await ctx.send("Rolling dice...")
         await ctx.send(f"You rolled a {random.randint(1, number_of_sides)}")

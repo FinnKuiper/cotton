@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 import os
 
@@ -18,7 +17,6 @@ class Hug(commands.Cog):
         description="Hug some... or yourself?",
         aliases=["h"],
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     async def hug(self, ctx, user: discord.Member = None):
         if user:
             await ctx.send(f"{ctx.author.mention} hugged {user.mention}")

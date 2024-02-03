@@ -1,9 +1,7 @@
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 from pymongo_get_database import get_database
 import os
-import discord
 
 load_dotenv()
 guild_id = int(os.getenv("GUILD_ID"))
@@ -19,7 +17,6 @@ class SyncDatabase(commands.Cog):
         with_app_command=True,
         description="If a user isn't in the database this would add them. (cooldown of 1 hour)",
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     @commands.has_permissions(administrator=True)
     async def syncdatabase(self, ctx):
         # check for every user in the guild if they are in the leveling database
