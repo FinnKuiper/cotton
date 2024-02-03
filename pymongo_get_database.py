@@ -1,7 +1,10 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from dotenv import load_dotenv
+import certifi
 import os
+
+ca = certifi.where()
 
 # load environment variables
 load_dotenv()
@@ -9,14 +12,15 @@ load_dotenv()
 
 # create mongodb client
 def get_database():
-    CONNECTION_STRING = os.getenv('MONGODB_CONNECTION_STRING')
-    client = MongoClient(CONNECTION_STRING, server_api=ServerApi('1'))
+    CONNECTION_STRING = os.getenv("MONGODB_CONNECTION_STRING")
+    client = MongoClient(CONNECTION_STRING, server_api=ServerApi("1"), tlsCAFile=ca)
     try:
-        client.admin.command('ping')
+        client.admin.command("ping")
     except Exception as e:
         print(e)
-        
+
     return client["discord-bot"]
+
 
 if __name__ == "__main__":
     dbname = get_database()
