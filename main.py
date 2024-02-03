@@ -207,4 +207,5 @@ async def on_message(message):
 
 
 # run bot
+print(token)
 bot.run(token)
