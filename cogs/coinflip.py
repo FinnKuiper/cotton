@@ -1,6 +1,4 @@
-import discord
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 import random
 import os
@@ -15,9 +13,11 @@ class Coinflip(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command(
-        name="coinflip", with_app_command=True, description="Flip a coin!", aliases=["cf"]
+        name="coinflip",
+        with_app_command=True,
+        description="Flip a coin!",
+        aliases=["cf"],
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     async def coinflip(self, ctx):
         await ctx.send("Flipping coin...")
         coin = ["heads", "tails"]

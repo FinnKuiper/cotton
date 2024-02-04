@@ -1,5 +1,4 @@
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 import os
 import discord
@@ -17,7 +16,6 @@ class Help(commands.Cog):
         with_app_command=True,
         description="Get all the commands of the bot",
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     async def help(self, ctx):
         embed = discord.Embed(
             title="Help",

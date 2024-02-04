@@ -1,6 +1,4 @@
-import discord
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 import os
 from pymongo_get_database import get_database
@@ -18,7 +16,6 @@ class SetPrefix(commands.Cog):
         with_app_command=True,
         description="Set the prefix for the bot",
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     @commands.has_permissions(administrator=True)
     async def setprefix(self, ctx: commands.Context, prefix: str = None):
         guild = ctx.guild

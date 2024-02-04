@@ -1,6 +1,4 @@
 from discord.ext import commands
-from discord import app_commands
-import discord
 from dotenv import load_dotenv
 import os
 from pymongo_get_database import get_database
@@ -16,7 +14,6 @@ class Setup(commands.Cog):
     @commands.hybrid_command(
         name="setup", with_app_command=True, description="Setup the bot"
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     @commands.has_permissions(administrator=True)
     async def setup(self, ctx):
         guild = ctx.guild

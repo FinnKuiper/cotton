@@ -1,5 +1,4 @@
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 import os
 import discord
@@ -15,7 +14,6 @@ class Ban(commands.Cog):
     @commands.hybrid_command(
         name="ban", with_app_command=True, description="ban a user"
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     @commands.has_permissions(administrator=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
         await member.ban(reason=reason)

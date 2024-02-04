@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import app_commands
 from pymongo_get_database import get_database
 from dotenv import load_dotenv
 import os
@@ -18,7 +17,6 @@ class GuildInfo(commands.Cog):
         with_app_command=True,
         description="Get the guild info",
     )
-    @app_commands.guilds(discord.Object(id=guild_id))
     async def guildinfo(self, ctx):
         # get database
         dbname = get_database()
