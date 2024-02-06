@@ -52,6 +52,9 @@ class Warn(commands.Cog):
                     "user_id": memberId,
                     "guild": guild.id,
                     "warns": 1,
+                    "banned": False,
+                    "kicked": False,
+                    "muted": False,
                     "reason": reason,
                 }
             )
