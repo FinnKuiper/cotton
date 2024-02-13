@@ -51,6 +51,17 @@ class CheckUser(commands.Cog):
         embed.add_field(name="Banned", value=banned, inline=False)
         embed.add_field(name="Kicked", value=kicked, inline=False)
         embed.add_field(name="Muted", value=muted, inline=False)
+        embed.set_footer(text=f"Requested by {ctx.author.name}")
+        embed.set_author(
+            name="Poeks",
+            icon_url="https://cdn.discordapp.com/app-icons/868469587426045973/e42d5623fc11af69f6a84dbef205f3ef.png?size=256",
+        )
+        # add link to discord bot server
+        embed.add_field(
+            name="Support",
+            value="[Discord Server](https://discord.gg/3m8T6JX)",
+            inline=False,
+        )
         await ctx.send(embed=embed)
 
 
